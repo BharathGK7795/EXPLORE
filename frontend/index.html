@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigitalHub - Unified AI Web Ecosystem</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Style Sheets -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body class="dark-theme">
+    <!-- Subtle Background Ambient Light Effect -->
+    <div class="bg-glow bg-glow-primary"></div>
+    <div class="bg-glow bg-glow-secondary"></div>
+
+    <div class="app-container">
+        <!-- Navigation Header -->
+        <header class="app-header">
+            <div class="header-logo">
+                <i class="fa-solid fa-cubes logo-icon"></i>
+                <span>Digital<span>Hub</span></span>
+            </div>
+            
+            <nav class="main-nav">
+                <a href="#explore" class="nav-link active" id="nav-explore">
+                    <i class="fa-solid fa-compass"></i> Explore
+                </a>
+                <a href="#learn" class="nav-link" id="nav-learn">
+                    <i class="fa-solid fa-graduation-cap"></i> Learn
+                </a>
+                <a href="#play" class="nav-link" id="nav-play">
+                    <i class="fa-solid fa-gamepad"></i> Play
+                </a>
+                <a href="#enjoy" class="nav-link" id="nav-enjoy">
+                    <i class="fa-solid fa-spa"></i> Enjoy
+                </a>
+            </nav>
+
+            <div class="header-user" id="header-user-panel">
+                <!-- Guest View -->
+                <div class="guest-controls" id="guest-controls">
+                    <button class="btn btn-secondary" onclick="app.showAuthModal('login')">Log In</button>
+                    <button class="btn btn-primary" onclick="app.showAuthModal('register')">Sign Up</button>
+                </div>
+                
+                <!-- Authenticated View -->
+                <div class="auth-controls hidden" id="auth-controls">
+                    <div class="points-badge">
+                        <i class="fa-solid fa-coins points-icon"></i>
+                        <span id="user-points-val">0</span> <span class="points-label">HP</span>
+                    </div>
+                    <div class="user-profile-summary">
+                        <i class="fa-solid fa-user-astronaut profile-avatar"></i>
+                        <div class="profile-details">
+                            <span class="user-email-lbl" id="user-email-val">learner@digitalhub.io</span>
+                            <div class="badges-row" id="user-badges-container">
+                                <!-- Badges dynamic load -->
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-icon logout-btn" onclick="app.handleLogout()" title="Log Out">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard View Container -->
+        <main class="app-main">
+            <!-- 1. EXPLORE & SEARCH MODULE -->
+            <section id="view-explore" class="dashboard-view active">
+                <div class="view-hero">
+                    <h1>Explore the Digital Ecosystem</h1>
+                    <p>Discover personalized learning tracks, retro arcade challenges, and focus-enhancing widgets driven by AI recommendations.</p>
+                    
+                    <!-- Search Widget -->
+                    <div class="search-box-container">
+                        <i class="fa-solid fa-magnifying-glass search-bar-icon"></i>
+                        <input type="text" id="global-search-input" placeholder="Search across courses, games, widgets, and articles...">
+                        <button class="btn btn-primary search-btn" onclick="searchModule.handleSearch()">Search</button>
+                    </div>
+                </div>
+
+                <div class="explore-sections-grid">
+                    <!-- Left: AI Recommended For You -->
+                    <div class="explore-col-main">
+                        <div class="section-header">
+                            <div class="header-title">
+                                <i class="fa-solid fa-wand-magic-sparkles text-glow-purple"></i>
+                                <h2>Recommended For You</h2>
+                            </div>
+                            <span class="badge badge-purple-glow">AI Powered (Cosine Similarity)</span>
+                        </div>
+                        <div class="auth-prompt-card" id="explore-auth-prompt">
+                            <i class="fa-solid fa-lock prompt-icon"></i>
+                            <h3>Unlock Personalized Recommendations</h3>
+                            <p>Log in or create an account to activate the Cosine Similarity Recommendation Engine based on your interactions across Learn, Play, and Enjoy modules.</p>
+                            <button class="btn btn-purple" onclick="app.showAuthModal('register')">Get Started</button>
+                        </div>
+                        <div class="recommendations-grid hidden" id="recommendations-grid">
+                            <!-- Dynamic content cards -->
+                        </div>
+                    </div>
+
+                    <!-- Right: Quick Navigation Deck -->
+                    <div class="explore-col-side">
+                        <div class="section-header">
+                            <h2>Hub Modules</h2>
+                        </div>
+                        <div class="module-cards-stack">
+                            <div class="module-shortcut-card card-learn" onclick="app.navigate('#learn')">
+                                <div class="card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                                <div class="card-desc">
+                                    <h3>Interactive Learn</h3>
+                                    <p>Modular micro-courses, instant grading quizzes, and an NLP text notes generator.</p>
+                                </div>
+                                <i class="fa-solid fa-chevron-right arrow-icon"></i>
+                            </div>
+                            <div class="module-shortcut-card card-play" onclick="app.navigate('#play')">
+                                <div class="card-icon"><i class="fa-solid fa-gamepad"></i></div>
+                                <div class="card-desc">
+                                    <h3>Arcade Play</h3>
+                                    <p>Retro HTML5 space shooter with global leaderboards connected via WebSockets.</p>
+                                </div>
+                                <i class="fa-solid fa-chevron-right arrow-icon"></i>
+                            </div>
+                            <div class="module-shortcut-card card-enjoy" onclick="app.navigate('#enjoy')">
+                                <div class="card-icon"><i class="fa-solid fa-spa"></i></div>
+                                <div class="card-desc">
+                                    <h3>Leisure Enjoy</h3>
+                                    <p>Procedural Web Audio synthesizers, focus Pomodoro timer, and streak habit tracker.</p>
+                                </div>
+                                <i class="fa-solid fa-chevron-right arrow-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. LEARN MODULE -->
+            <section id="view-learn" class="dashboard-view">
+                <div class="view-header-title">
+                    <h2><i class="fa-solid fa-graduation-cap header-icon"></i> Personalized Learning Studio</h2>
+                    <p>Enrich your knowledge with modular micro-courses. Study with the NLP summary tool and test your understanding with instant feedback quizzes.</p>
+                </div>
+
+                <div class="learn-grid">
+                    <!-- Left Column: Courses Index & Interactive Reader -->
+                    <div class="learn-col-courses">
+                        <!-- Catalog View -->
+                        <div class="courses-catalog-container" id="courses-catalog-view">
+                            <div class="sub-section-header">
+                                <h3>Available Courses</h3>
+                            </div>
+                            <div class="courses-list-grid" id="courses-list-grid">
+                                <!-- Dynamic courses load -->
+                            </div>
+                        </div>
+
+                        <!-- Reader & Quiz View -->
+                        <div class="course-reader-container hidden" id="course-reader-view">
+                            <button class="btn btn-text-back mb-3" onclick="learnModule.exitCourseReader()">
+                                <i class="fa-solid fa-arrow-left"></i> Back to Catalog
+                            </button>
+                            <article class="glass-card course-reader-card">
+                                <div class="course-reader-header">
+                                    <span class="course-category-badge" id="reader-category">Category</span>
+                                    <h2 id="reader-title">Course Title</h2>
+                                    <div class="difficulty-tag" id="reader-difficulty">Beginner</div>
+                                </div>
+                                <div class="course-content-body" id="reader-content-body">
+                                    <!-- Chapter content -->
+                                </div>
+                                <div class="course-reader-footer" id="reader-footer-actions">
+                                    <button class="btn btn-primary" id="start-quiz-btn">Take Module Quiz</button>
+                                </div>
+                            </article>
+
+                            <!-- Quiz Sub-card -->
+                            <div class="glass-card quiz-card hidden" id="quiz-card-view">
+                                <div class="quiz-header">
+                                    <h3>Interactive Module Checkpoint</h3>
+                                    <span class="quiz-badge"><i class="fa-solid fa-circle-question"></i> <span id="quiz-question-counter">1/2</span></span>
+                                </div>
+                                <div class="quiz-content" id="quiz-questions-container">
+                                    <!-- Dynamic quiz contents -->
+                                </div>
+                                <div class="quiz-actions">
+                                    <button class="btn btn-secondary" id="quiz-prev-btn" disabled>Previous</button>
+                                    <button class="btn btn-primary" id="quiz-next-btn">Next</button>
+                                    <button class="btn btn-success hidden" id="quiz-submit-btn">Submit Quiz</button>
+                                </div>
+                                <div class="quiz-results hidden" id="quiz-results-view">
+                                    <!-- Quiz score output -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: NLP Text Summarization Studio -->
+                    <div class="learn-col-notes">
+                        <div class="glass-card notes-generator-card">
+                            <div class="card-icon-header">
+                                <i class="fa-solid fa-wand-magic-sparkles text-glow-indigo"></i>
+                                <h3>NLP Study Takeaway Generator</h3>
+                            </div>
+                            <p class="text-secondary card-subtitle">Paste any article, paper, or text note. Our extractive TF-IDF engine will parse and extract core takeaways.</p>
+                            
+                            <div class="form-group mt-3">
+                                <label for="nlp-text-input">Source Document Text</label>
+                                <textarea id="nlp-text-input" placeholder="Type or paste study text here... (minimum 5 sentences for best results)" rows="8"></textarea>
+                            </div>
+
+                            <div class="summary-control-row">
+                                <div class="form-group-inline">
+                                    <label for="summary-length">Target Sentences:</label>
+                                    <select id="summary-length">
+                                        <option value="2">2 Sentences</option>
+                                        <option value="3" selected>3 Sentences</option>
+                                        <option value="5">5 Sentences</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary btn-glow-indigo" onclick="learnModule.generateSummary()">
+                                    <i class="fa-solid fa-bolt"></i> Generate Takeaways
+                                </button>
+                            </div>
+
+                            <div class="summary-output-box hidden" id="summary-output-box">
+                                <h4>Generated Summary</h4>
+                                <p id="summary-result-text"></p>
+                                
+                                <h4>Key Term Entities</h4>
+                                <div class="key-entities-row" id="summary-result-keywords">
+                                    <!-- Keywords dynamic -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. PLAY MODULE (ARCADE) -->
+            <section id="view-play" class="dashboard-view">
+                <div class="view-header-title">
+                    <h2><i class="fa-solid fa-gamepad header-icon"></i> Retro Canvas Arcade</h2>
+                    <p>Challenge your hand-eye coordination in the custom HTML5 Canvas space shooter. Connect to live WebSockets for competitive rankings.</p>
+                </div>
+
+                <div class="play-grid">
+                    <!-- Left: Canvas Game Frame -->
+                    <div class="play-col-game">
+                        <div class="glass-card game-canvas-card">
+                            <div class="game-hud-bar">
+                                <div class="hud-score">
+                                    <span>Score:</span> <strong id="game-live-score">0</strong>
+                                </div>
+                                <div class="hud-lives">
+                                    <span>Shields:</span> <span id="game-live-shields" class="shield-indicator">100%</span>
+                                </div>
+                                <div class="hud-actions">
+                                    <button class="btn-icon" id="game-mute-btn" onclick="playModule.toggleMute()" title="Toggle Sound">
+                                        <i class="fa-solid fa-volume-high"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="canvas-wrapper">
+                                <canvas id="arcade-canvas" width="600" height="400"></canvas>
+                                <!-- Overlay states -->
+                                <div class="canvas-overlay" id="canvas-start-overlay">
+                                    <h2>Neo-Vortex</h2>
+                                    <p>Move mouse / arrows to fly. Press SPACE / click to fire laser cannons. Destroy vortex nodes and collect glowing energy gems.</p>
+                                    <button class="btn btn-primary btn-lg" onclick="playModule.startGame()">Start Flight</button>
+                                </div>
+                                <div class="canvas-overlay hidden" id="canvas-gameover-overlay">
+                                    <h2>Shield Depleted</h2>
+                                    <p>Your spacecraft crashed. Final Vector Score:</p>
+                                    <div class="score-display-glow" id="canvas-final-score">0</div>
+                                    <p class="small text-secondary" id="score-auth-prompt-play">Log in to save your score and submit to the global leaderboard.</p>
+                                    <button class="btn btn-primary btn-lg" onclick="playModule.startGame()">Launch Again</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: WebSockets Leaderboard -->
+                    <div class="play-col-leaderboard">
+                        <div class="glass-card leaderboard-card">
+                            <div class="card-icon-header">
+                                <i class="fa-solid fa-trophy text-glow-yellow"></i>
+                                <h3>Global Leaderboard</h3>
+                            </div>
+                            <span class="badge badge-yellow-glow" id="leaderboard-ws-status">
+                                <span class="ws-indicator offline"></span> WebSocket Standby
+                            </span>
+
+                            <div class="leaderboard-table-container">
+                                <table class="leaderboard-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Rank</th>
+                                            <th>Player</th>
+                                            <th class="text-right">Score</th>
+                                            <th class="text-right">Timestamp</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="leaderboard-body">
+                                        <!-- Dynamic list -->
+                                        <tr>
+                                            <td colspan="4" class="text-center text-secondary py-4">No records loaded</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. ENJOY MODULE (WELLNESS & MUSIC) -->
+            <section id="view-enjoy" class="dashboard-view">
+                <div class="view-header-title">
+                    <h2><i class="fa-solid fa-spa header-icon"></i> Enjoy Leisure Studio</h2>
+                    <p>Synthesize live procedural soundscapes tailored to your mood. Keep your habits structured and manage focus with the customizable Pomodoro.</p>
+                </div>
+
+                <div class="enjoy-grid">
+                    <!-- Left: Synthesizer & Mood -->
+                    <div class="enjoy-col-synth">
+                        <div class="glass-card soundscape-card">
+                            <div class="card-icon-header">
+                                <i class="fa-solid fa-music text-glow-blue"></i>
+                                <h3>Procedural Ambient Synthesizer</h3>
+                            </div>
+                            <p class="text-secondary card-subtitle">Generated in real-time using the HTML5 Web Audio API. Smooth procedural drones, waves, and chimes.</p>
+                            
+                            <div class="mood-selector-row mt-4">
+                                <button class="mood-btn" id="mood-btn-focus" onclick="enjoyModule.setMood('focus')">
+                                    <i class="fa-solid fa-brain"></i>
+                                    <span>Focus</span>
+                                    <span class="mood-desc">Binaural Study Drone</span>
+                                </button>
+                                <button class="mood-btn" id="mood-btn-relaxed" onclick="enjoyModule.setMood('relaxed')">
+                                    <i class="fa-solid fa-umbrella"></i>
+                                    <span>Relaxed</span>
+                                    <span class="mood-desc">Procedural Rain & Hearth</span>
+                                </button>
+                                <button class="mood-btn" id="mood-btn-curious" onclick="enjoyModule.setMood('curious')">
+                                    <i class="fa-solid fa-wand-magic"></i>
+                                    <span>Curious</span>
+                                    <span class="mood-desc">Generative Pentatonic Synth</span>
+                                </button>
+                            </div>
+
+                            <div class="synth-visualizer-box mt-4">
+                                <canvas id="synth-visualizer" width="500" height="80"></canvas>
+                            </div>
+
+                            <div class="audio-control-panel mt-3">
+                                <button class="btn btn-circle" id="enjoy-play-pause-btn" onclick="enjoyModule.toggleAudio()" disabled>
+                                    <i class="fa-solid fa-play"></i>
+                                </button>
+                                <div class="volume-slider-container">
+                                    <i class="fa-solid fa-volume-low text-secondary"></i>
+                                    <input type="range" id="synth-volume" min="0" max="100" value="50" oninput="enjoyModule.setVolume(this.value)">
+                                    <i class="fa-solid fa-volume-high text-secondary"></i>
+                                </div>
+                                <span class="audio-status-text" id="audio-status-txt">Select a mood to synthesize</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Middle: Pomodoro Widget -->
+                    <div class="enjoy-col-pomo">
+                        <div class="glass-card pomodoro-card">
+                            <div class="card-icon-header">
+                                <i class="fa-solid fa-stopwatch text-glow-red"></i>
+                                <h3>Focus Pomodoro</h3>
+                            </div>
+                            
+                            <div class="pomodoro-timer-wrapper">
+                                <svg class="timer-svg" viewBox="0 0 200 200">
+                                    <circle class="timer-track" cx="100" cy="100" r="88" />
+                                    <circle class="timer-progress" id="pomo-progress" cx="100" cy="100" r="88" />
+                                </svg>
+                                <div class="timer-display">
+                                    <span id="pomo-time-lbl">25:00</span>
+                                    <span class="timer-state-lbl" id="pomo-state-lbl">Work Session</span>
+                                </div>
+                            </div>
+
+                            <div class="timer-controls mt-4">
+                                <button class="btn btn-secondary" onclick="enjoyModule.resetPomodoro()">Reset</button>
+                                <button class="btn btn-primary" id="pomo-start-stop-btn" onclick="enjoyModule.togglePomodoro()">Start</button>
+                            </div>
+
+                            <div class="timer-settings mt-4">
+                                <button class="btn btn-small-tab active" id="pomo-opt-work" onclick="enjoyModule.setTimerConfig(25, 'work')">25m Work</button>
+                                <button class="btn btn-small-tab" id="pomo-opt-short" onclick="enjoyModule.setTimerConfig(5, 'short')">5m Rest</button>
+                                <button class="btn btn-small-tab" id="pomo-opt-long" onclick="enjoyModule.setTimerConfig(15, 'long')">15m Break</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Habit Streak Board -->
+                    <div class="enjoy-col-habits">
+                        <div class="glass-card habit-board-card">
+                            <div class="card-icon-header">
+                                <i class="fa-solid fa-calendar-check text-glow-green"></i>
+                                <h3>Daily Streak Board</h3>
+                            </div>
+                            <p class="text-secondary card-subtitle">Build daily habits, maintain your streak, and earn HubPoints (+2 HP per checkout).</p>
+                            
+                            <div class="auth-prompt-card p-3 mt-3" id="habits-auth-prompt">
+                                <i class="fa-solid fa-lock prompt-icon-small"></i>
+                                <h4>Sync Your Habits</h4>
+                                <p class="small text-secondary">Log in to track streaks, save habits, and earn points on completion.</p>
+                                <button class="btn btn-sm btn-green mt-2" onclick="app.showAuthModal('login')">Log In</button>
+                            </div>
+
+                            <div class="habits-view-container hidden" id="habits-view-container">
+                                <div class="add-habit-bar mt-3">
+                                    <input type="text" id="new-habit-input" placeholder="Enter new habit name...">
+                                    <button class="btn btn-green btn-icon" onclick="enjoyModule.createHabit()" title="Add Habit">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="habits-list mt-3" id="habits-list">
+                                    <!-- Dynamic list of habits -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Dynamic Global Footer -->
+        <footer class="app-footer">
+            <p>&copy; 2026 DigitalHub Unified Ecosystem. All rights reserved. Created with high-fidelity Web Audio, WebSockets, and Cosine Similarity.</p>
+        </footer>
+    </div>
+
+    <!-- GLOBAL AUTH MODAL -->
+    <div class="modal-overlay hidden" id="auth-modal">
+        <div class="glass-card modal-container">
+            <button class="btn-close-modal" onclick="app.closeAuthModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="modal-tabs">
+                <button class="modal-tab-btn active" id="tab-login-btn" onclick="app.toggleAuthTab('login')">Log In</button>
+                <button class="modal-tab-btn" id="tab-register-btn" onclick="app.toggleAuthTab('register')">Sign Up</button>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="login-form" class="modal-form" onsubmit="app.handleLoginSubmit(event)">
+                <div class="form-group">
+                    <label for="login-email">Email Address</label>
+                    <div class="input-icon-group">
+                        <i class="fa-solid fa-envelope input-icon-inner"></i>
+                        <input type="email" id="login-email" required placeholder="name@domain.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <div class="input-icon-group">
+                        <i class="fa-solid fa-lock input-icon-inner"></i>
+                        <input type="password" id="login-password" required placeholder="••••••••">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block mt-4">Enter Dashboard</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" class="modal-form hidden" onsubmit="app.handleRegisterSubmit(event)">
+                <div class="form-group">
+                    <label for="register-email">Email Address</label>
+                    <div class="input-icon-group">
+                        <i class="fa-solid fa-envelope input-icon-inner"></i>
+                        <input type="email" id="register-email" required placeholder="name@domain.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <div class="input-icon-group">
+                        <i class="fa-solid fa-lock input-icon-inner"></i>
+                        <input type="password" id="register-password" required placeholder="Min 6 characters">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block mt-4">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Dynamic Modules Javascript -->
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/learn.js"></script>
+    <script src="js/play.js"></script>
+    <script src="js/enjoy.js"></script>
+    <script src="js/search.js"></script>
+</body>
+</html>
